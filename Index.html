@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ting-Yi Lin — NCUE EE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #ffffff;
+      --surface:  #f8f9fa;
+      --border:   #e9ecef;
+      --border2:  #dee2e6;
+      --accent:   #1a56db;
+      --accent-h: #1040b0;
+      --green:    #0e7c59;
+      --text:     #111827;
+      --muted:    #6b7280;
+      --light:    #f3f4f6;
+      --nav-bg:   rgba(255,255,255,0.95);
+    }
+
+    html[data-theme="dark"] {
+      --bg:       #0f1117;
+      --surface:  #161b27;
+      --border:   #1e2536;
+      --border2:  #2a3347;
+      --accent:   #4d8ef0;
+      --accent-h: #6aa3f5;
+      --green:    #34d399;
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --light:    #161b27;
+      --nav-bg:   rgba(15,17,23,0.95);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 52px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    /* ── Main layout ── */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    /* ── Profile ── */
+    #profile {
+      padding: 3.5rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .profile-photo {
+      width: 130px;
+      height: 160px;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 4px;
+      border: 1px solid var(--border2);
+      display: block;
+    }
+
+    .profile-photo-placeholder {
+      width: 130px;
+      height: 160px;
+      border-radius: 4px;
+      background: var(--surface);
+      border: 1px dashed var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    .profile-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .profile-name-zh {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-left: 0.5rem;
+    }
+
+    .profile-role {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin: 0.4rem 0 1rem;
+      line-height: 1.5;
+    }
+
+    .profile-bio {
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.75;
+      margin-bottom: 1.2rem;
+      max-width: 580px;
+    }
+
+    .profile-bio strong { font-weight: 600; }
+
+    .profile-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .link-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.76rem;
+      padding: 0.28rem 0.75rem;
+      border-radius: 3px;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      text-decoration: none;
+      background: var(--bg);
+      transition: border-color 0.15s, color 0.15s;
+      font-weight: 400;
+    }
+    .link-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── Section ── */
+    .section {
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section:last-child { border-bottom: none; }
+
+    .sec-head {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .sec-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .sec-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── News ── */
+    .news-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 1rem;
+      padding: 0.5rem 0;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--light);
+    }
+    .news-row:last-child { border-bottom: none; }
+    .news-date { color: var(--muted); font-size: 0.78rem; padding-top: 0.05rem; }
+    .news-row strong { color: var(--accent); font-weight: 500; }
+
+    /* ── Research interests ── */
+    .interests { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .int-tag {
+      font-size: 0.77rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 3px;
+      background: #eff6ff;
+      color: var(--accent);
+      border: 1px solid #bfdbfe;
+      font-weight: 400;
+    }
+
+    /* ── Publication ── */
+    .pub-box {
+      border: 1px solid var(--border2);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 1.3rem 1.5rem;
+      background: var(--bg);
+    }
+
+    .pub-title-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 0.4rem;
+    }
+
+    .pub-authors {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+    .pub-authors .me {
+      color: var(--text);
+      font-weight: 500;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-underline-offset: 2px;
+    }
+
+    .pub-venue {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 0.8rem;
+    }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 3px;
+      border: 1px solid;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .b-blue  { color: var(--accent);   border-color: #93c5fd; background: #eff6ff; }
+    .b-green { color: var(--green);    border-color: #6ee7b7; background: #f0fdf4; }
+    .b-gray  { color: var(--muted);    border-color: var(--border2); background: var(--surface); }
+
+    .pub-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat {
+      text-align: center;
+      padding: 0.5rem 0.25rem;
+      background: var(--surface);
+      border-radius: 3px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-val {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: block;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-lbl {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Projects ── */
+    .proj-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+    .proj-row:last-child { border-bottom: none; }
+
+    .proj-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .proj-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 0.45rem;
+      max-width: 600px;
+    }
+
+    .proj-metric {
+      font-size: 0.77rem;
+      color: var(--green);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+    .sm-tag {
+      font-size: 0.7rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 3px;
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border2);
+    }
+
+    .gh-link {
+      font-size: 0.74rem;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid var(--border2);
+      border-radius: 3px;
+      color: var(--muted);
+      white-space: nowrap;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+      align-self: flex-start;
+      margin-top: 0.1rem;
+    }
+    .gh-link:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+    /* ── Skills ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .skill-group h4 {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.55rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── Reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .profile-grid { grid-template-columns: 1fr; }
+      .pub-stats { grid-template-columns: repeat(2, 1fr); }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .proj-row { grid-template-columns: 1fr; }
+      .nav-links { gap: 1.2rem; }
+    }
+    /* ── Dark mode transition ── */
+    body, nav, .pub-box, .stat, .link-chip, .sm-tag, .int-tag, .gh-link {
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    /* ── Theme toggle button ── */
+    #theme-toggle {
+      background: none;
+      border: 1px solid var(--border2);
+      border-radius: 3px;
+      padding: 0.25rem 0.55rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1;
+      transition: border-color 0.15s, color 0.15s;
+      margin-left: 1rem;
+    }
+    #theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* dark mode badge adjustments */
+    html[data-theme="dark"] .b-blue  { background: rgba(77,142,240,0.1); }
+    html[data-theme="dark"] .b-green { background: rgba(52,211,153,0.1); }
+    html[data-theme="dark"] .b-gray  { background: var(--surface); }
+    html[data-theme="dark"] .int-tag { background: rgba(77,142,240,0.1); border-color: rgba(77,142,240,0.3); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-name">Ting-Yi Lin</span>
+    <ul class="nav-links">
+      <li><a href="#news">News</a></li>
+      <li><a href="#publication">Publication</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☀️</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- Profile -->
+  <section id="profile">
+    <div class="profile-grid">
+      <img src="photo.jpg" alt="Ting-Yi Lin" class="profile-photo"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+      <div class="profile-photo-placeholder" style="display:none;">photo.jpg</div>
+
+      <div>
+        <h1 class="profile-name">
+          Ting-Yi Lin
+          <span class="profile-name-zh">林庭毅</span>
+        </h1>
+        <p class="profile-role">
+          M.S. Student · Electrical Engineering ·
+          <a href="https://ncue-ee-aial.github.io/Artificial-Intelligence-Application-Laboratory-Website/" target="_blank">AI Application Lab</a>
+          · National Changhua University of Education
+        </p>
+        <p class="profile-bio">
+          I am a first-year M.S. student advised by Prof. Wen-Ran Yang.
+          My research focuses on <strong>affective computing</strong> and
+          <strong>long-context state space models (Mamba/SSM)</strong>
+          for multimodal emotion recognition, with emphasis on real-time,
+          privacy-preserving edge deployment.
+          I have published at IET ICETA 2024 (cited) and hold an active
+          NSTC grant proposal for my current thesis.
+        </p>
+        <div class="profile-links">
+          <a class="link-chip" href="mailto:brian104120@gmail.com">✉ brian104120@gmail.com</a>
+          <a class="link-chip" href="https://github.com/brian10420" target="_blank">⌥ GitHub</a>
+          <a class="link-chip" href="https://scholar.google.com/citations?user=rAffM4EAAAAJ" target="_blank">◎ Google Scholar</a>
+          <a class="link-chip" href="https://ncue-ee-aial.github.io/Artificial-Intelligence-Application-Laboratory-Website/" target="_blank">⬡ AI App Lab</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News -->
+  <section id="news" class="section reveal">
+    <div class="sec-head"><span class="sec-title">News</span><div class="sec-line"></div></div>
+    <div class="news-row">
+      <span class="news-date">Sep 2025</span>
+      <span>Started M.S. program at NCUE — AI Application Lab.</span>
+    </div>
+    <div class="news-row">
+      <span class="news-date">2025</span>
+      <span><strong>NSTC grant submitted</strong> — Echo Mind System (multimodal emotion recognition).</span>
+    </div>
+    <div class="news-row">
+      <span class="news-date">Oct 2024</span>
+      <span>Paper accepted and published at <strong>IET ICETA 2024</strong>. Cited by 1.</span>
+    </div>
+    <div class="news-row">
+      <span class="news-date">Jul 2025</span>
+      <span>Graduated B.S. in Electrical Engineering, NCUE.</span>
+    </div>
+  </section>
+
+  <!-- Research -->
+  <section id="research" class="section reveal">
+    <div class="sec-head"><span class="sec-title">Research Interests</span><div class="sec-line"></div></div>
+    <div class="interests">
+      <span class="int-tag">Affective Computing</span>
+      <span class="int-tag">State Space Models (Mamba/SSM)</span>
+      <span class="int-tag">Multimodal Fusion</span>
+      <span class="int-tag">Speech &amp; Language Processing</span>
+      <span class="int-tag">Computer Vision</span>
+      <span class="int-tag">Edge AI</span>
+      <span class="int-tag">Deep Learning</span>
+    </div>
+  </section>
+
+  <!-- Publication -->
+  <section id="publication" class="section reveal">
+    <div class="sec-head"><span class="sec-title">Publication</span><div class="sec-line"></div></div>
+    <div class="pub-box">
+      <p class="pub-title-text">Two-Step Authentication: Multi-Biometric System Using Voice and Facial Recognition</p>
+      <p class="pub-authors">
+        K.W. Chen, <span class="me">T.Y. Lin</span>, W.R. Yang, A. Kesarwani, R. Singh
+      </p>
+      <p class="pub-venue">
+        IET Conference Proceedings CP893 (ICETA 2024) · Vol. 2024, No. 22, pp. 11–12
+      </p>
+      <div class="badge-row">
+        <span class="badge b-blue">ICETA 2024</span>
+        <span class="badge b-green">Cited by 1</span>
+        <a class="badge b-gray" href="https://doi.org/10.1049/icp.2024.4141" target="_blank">DOI ↗</a>
+        <a class="badge b-gray" href="https://scholar.google.com/citations?view_op=view_citation&user=rAffM4EAAAAJ&citation_for_view=rAffM4EAAAAJ:u5HHmVD_uO8C" target="_blank">Scholar ↗</a>
+      </div>
+      <div class="pub-stats">
+        <div class="stat"><span class="stat-val">95.1%</span><span class="stat-lbl">Face Acc.</span></div>
+        <div class="stat"><span class="stat-val">95.7%</span><span class="stat-lbl">Face F1</span></div>
+        <div class="stat"><span class="stat-val">98.9%</span><span class="stat-lbl">Voice Acc.</span></div>
+        <div class="stat"><span class="stat-val">3.46%</span><span class="stat-lbl">Voice EER</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section reveal">
+    <div class="sec-head"><span class="sec-title">Projects</span><div class="sec-line"></div></div>
+
+    <div class="proj-row">
+      <div>
+        <p class="proj-name">Echo Mind System with Arousal-Valence</p>
+        <p class="proj-desc">Real-time multimodal emotion recognition on Mamba (SSM/SSD), fusing speech and text. Designed for low-latency inference, long-term memory, and on-device privacy. Current M.S. thesis.</p>
+        <p class="proj-metric">IEMOCAP benchmark · NSTC grant submitted</p>
+        <div class="tag-row">
+          <span class="sm-tag">Mamba/SSM</span><span class="sm-tag">PyTorch</span>
+          <span class="sm-tag">Multimodal</span><span class="sm-tag">Affective Computing</span>
+        </div>
+      </div>
+      <a class="gh-link" href="https://github.com/brian10420/Echo_mind_system-with-Arousal-Valence-base" target="_blank">GitHub ↗</a>
+    </div>
+
+    <div class="proj-row">
+      <div>
+        <p class="proj-name">Invigilation Using Lightweight Semantic Analysis</p>
+        <p class="proj-desc">Exam cheating detection via Swin-Transformer-Tiny-V2 pixel-level segmentation and ShuffleNet-V2 face identification. Edge-deployable at 28.9M total parameters.</p>
+        <p class="proj-metric">Seg. Acc. 92.74% · Face ID Acc. 98.6% · 28.9M params</p>
+        <div class="tag-row">
+          <span class="sm-tag">Swin-Transformer</span><span class="sm-tag">ShuffleNet</span>
+          <span class="sm-tag">Segmentation</span><span class="sm-tag">Edge AI</span>
+        </div>
+      </div>
+      <a class="gh-link" href="https://github.com/NCUE-EE-AIAL/Invigilation-Using-Lightweight-Semantic-Analysis" target="_blank">GitHub ↗</a>
+    </div>
+
+    <div class="proj-row">
+      <div>
+        <p class="proj-name">Google QUEST Q&amp;A Labeling Ensemble</p>
+        <p class="proj-desc">DeBERTa / RoBERTa + Mamba ensemble with custom post-processing: rank quantization for dense labels, zero-thresholding for sparse labels, champion-calibrated output distribution.</p>
+        <p class="proj-metric">Spearman 0.4884 — Gold medal level</p>
+        <div class="tag-row">
+          <span class="sm-tag">DeBERTa</span><span class="sm-tag">RoBERTa</span>
+          <span class="sm-tag">Mamba</span><span class="sm-tag">NLP</span><span class="sm-tag">Ensemble</span>
+        </div>
+      </div>
+      <a class="gh-link" href="https://github.com/brian10420/Google-Quest-QA-Ensemble" target="_blank">GitHub ↗</a>
+    </div>
+
+    <div class="proj-row">
+      <div>
+        <p class="proj-name">PYNQ-Z2 AES / DES / GCD Embedded Crypto</p>
+        <p class="proj-desc">AES, DES, and GCD hardware IPs in Verilog, synthesized via Vivado/Vitis with FreeRTOS on PYNQ-Z2. Packaged into a custom Linux kernel build for full FPGA deployment.</p>
+        <p class="proj-metric">Full Linux kernel deployment on PYNQ-Z2</p>
+        <div class="tag-row">
+          <span class="sm-tag">Verilog</span><span class="sm-tag">Vivado</span>
+          <span class="sm-tag">FreeRTOS</span><span class="sm-tag">PYNQ-Z2</span><span class="sm-tag">Linux</span>
+        </div>
+      </div>
+      <a class="gh-link" href="https://github.com/brian10420/PYNQ-Z2-AES-DES-GCD-Embedded-Crypto" target="_blank">GitHub ↗</a>
+    </div>
+
+    <div class="proj-row">
+      <div>
+        <p class="proj-name">URDiary — AI Conversational Diary</p>
+        <p class="proj-desc">Docker-deployed diary system using LLM APIs with persistent memory. Users journal through natural conversation; includes long-term emotion tracking and support.</p>
+        <p class="proj-metric">Docker · Persistent memory · Emotion analysis</p>
+        <div class="tag-row">
+          <span class="sm-tag">Python</span><span class="sm-tag">Docker</span>
+          <span class="sm-tag">LLM API</span><span class="sm-tag">Memory Mgmt</span>
+        </div>
+      </div>
+      <a class="gh-link" href="https://github.com/brian10420/URDiary" target="_blank">GitHub ↗</a>
+    </div>
+
+  </section>
+
+  <!-- Skills -->
+  <section class="section reveal">
+    <div class="sec-head"><span class="sec-title">Technical Skills</span><div class="sec-line"></div></div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h4>ML / DL</h4>
+        <div class="tag-row">
+          <span class="sm-tag">PyTorch</span><span class="sm-tag">HuggingFace</span>
+          <span class="sm-tag">Mamba/SSM</span><span class="sm-tag">Multimodal</span><span class="sm-tag">NLP</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Languages</h4>
+        <div class="tag-row">
+          <span class="sm-tag">Python</span><span class="sm-tag">C / C++</span>
+          <span class="sm-tag">MATLAB</span><span class="sm-tag">Verilog</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Embedded &amp; Systems</h4>
+        <div class="tag-row">
+          <span class="sm-tag">Vivado / Vitis</span><span class="sm-tag">FreeRTOS</span>
+          <span class="sm-tag">PYNQ-Z2</span><span class="sm-tag">Linux Kernel</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section reveal">
+    <div class="sec-head"><span class="sec-title">Contact</span><div class="sec-line"></div></div>
+    <p style="font-size:0.875rem;color:var(--muted);margin-bottom:1rem;">
+      Open to research collaborations, ML engineering internships, and full-time roles.
+    </p>
+    <div class="profile-links">
+      <a class="link-chip" href="mailto:brian104120@gmail.com">✉ brian104120@gmail.com</a>
+      <a class="link-chip" href="https://github.com/brian10420" target="_blank">⌥ GitHub</a>
+      <a class="link-chip" href="https://ncue-ee-aial.github.io/Artificial-Intelligence-Application-Laboratory-Website/" target="_blank">⬡ AI Application Lab</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Ting-Yi Lin (林庭毅) · NCUE Electrical Engineering · 2025
+</footer>
+
+<script>
+  // ── Scroll reveal ──
+  const io = new IntersectionObserver(
+    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.07 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ── Dark mode toggle ──
+  const btn = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+
+  // Restore saved preference
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') { html.setAttribute('data-theme', 'dark'); btn.textContent = '🌙'; }
+  else { btn.textContent = '☀️'; }
+
+  btn.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      html.removeAttribute('data-theme');
+      btn.textContent = '☀️';
+      localStorage.setItem('theme', 'light');
+    } else {
+      html.setAttribute('data-theme', 'dark');
+      btn.textContent = '🌙';
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+</script>
+
+</body>
+</html>
